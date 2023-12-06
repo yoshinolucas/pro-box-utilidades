@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Utilidades</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <a href="/index.html"><i class="fa fa-home"></i></a>
+    </header>
+    <main class="string">
+        <div class="container-wrapper">
+            <div class="container">
+                <div class="content">
+                    <p style="visibility:hidden;" id="error"></p>
+                    <p>Funções:</p>
+                    <div class="options">
+                        <button id="btn-uppercase">UPPERCASE</button>
+                        <button id="btn-lowercase">lowercase</button>
+                        <button id="btn-inverse">Inverse</button>
+                        <button id="btn-replace">Replace</button>
+                        <button id="btn-json">JSON Beautify</button>
+                    </div>
+                    <div style="display: none;" id="options-replace">
+                        <input id="replace-old">
+                        <p>to</p>
+                        <input id="replace-new">
+                    </div>
+                    <textarea id="result" placeholder="Digite o texto aqui"></textarea>
+                    <button id="submit-result">Gerar</button>
+                </div>           
+            </div>
+
+        </div>
+    </main>
+    
+</body>
+</html>
+<script>
+    let uppercase = document.getElementById("btn-uppercase");
+    let replace = document.getElementById("btn-replace");
+    let json = document.getElementById("btn-json");
+    let replace_options = document.getElementById("options-replace");
+    let replace_old = document.getElementById("replace-old");
+    let replace_new = document.getElementById("replace-new");
+    let inverse = document.getElementById("btn-inverse");
+    let lowercase = document.getElementById("btn-lowercase");
+    let submit = document.getElementById("submit-result");
+    let result = document.getElementById("result");
+    let error = document.getElementById("error");
+
+    function hiddenError() {
+        error.style.visibility = 'hidden';
+        error.innerText = '';
+    }
+
+    function reset() {
+        hiddenError();
+        lowercase.classList.remove('selected');
+        uppercase.classList.remove('selected');
+        inverse.classList.remove('selected');
+        replace.classList.remove('selected');
+        replace_options.style.display = 'none';
+        json.classList.remove('selected');
+    }
+
+    result.addEventListener('keyup', function() {
+        hiddenError()
+    })
+
+    inverse.addEventListener('click',function() {
+        reset();
+        inverse.className = 'selected';
+    });
+
+    replace.addEventListener('click',function() {
+        reset();
+        replace.className = 'selected';
+        replace_options.style.display = 'flex';
+    });
+
+    uppercase.addEventListener('click',function() {
+        reset();
+        uppercase.className = 'selected';
+    });
+
+    json.addEventListener('click',function() {
+        reset();
+        json.className = 'selected';
+    });
+
+    lowercase.addEventListener('click',function() {
+        reset();
+        lowercase.className = 'selected';
+    });
+
+    submit.addEventListener('click',function() {
+        var selected = document.getElementsByClassName('selected');
+        if(selected.length == 0) {
+            error.style.visibility = 'visible';
+            error.innerText = 'Selecione uma opção abaixo';
+        } else {
+            if(selected[0].innerText === "lowercase") {
+                if(result.value === '') {
+                    error.style.visibility = 'visible';
+                    error.innerText = 'Caixa de texto vazia';
+                } else {
+                    result.value = result.value.toLowerCase();
+                }
+            } else if(selected[0].innerText === "UPPERCASE"){
+                if(result.value === '') {
+                    error.style.visibility = 'visible';
+                    error.innerText = 'Caixa de texto vazia';
+                } else {
+                    result.value = result.value.toUpperCase();
+                }
+            } else if(selected[0].innerText === "Inverse"){
+                if(result.value === '') {
+                    error.style.visibility = 'visible';
+                    error.innerText = 'Caixa de texto vazia';
+                } else {
+                    result.value = result.value.split('').reverse().join('');
+                }
+            } else if(selected[0].innerText === "Replace"){
+                if(result.value === '') {
+                    error.style.visibility = 'visible';
+                    error.innerText = 'Caixa de texto vazia';
+                } else {
+                    result.value = result.value.replaceAll(replace_old.value, replace_new.value);
+                }
+            } else {
+                if(result.value === '') {
+                    error.style.visibility = 'visible';
+                    error.innerText = 'Caixa de texto vazia';
+                } else {
+                    var jsonOld = result.value.split('');
+                    var simpleTab = "\ \ ";
+                    var aux = 0;
+                    var jsonFormatted = jsonOld.map((char,index) => {
+                        if(char == '{') {
+                            aux++;
+                            return char + "\n" + simpleTab.repeat(aux);
+                        }
+                        if(char == '}') {
+                            aux--;
+                            return "\n" + simpleTab.repeat(aux) + char;
+                        }
+                        return char == ',' ? char + "\n" + simpleTab : char;
+                    })
+                    result.value = jsonFormatted.join("");
+                }
+            }
+        }
+        
+    });
+
+
+    
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js" integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
